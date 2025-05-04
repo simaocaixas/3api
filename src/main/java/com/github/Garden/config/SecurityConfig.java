@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,7 +32,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())                 // Disable CSRF protection, using JWT (stateless)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .httpBasic(httpBasic -> httpBasic.disable())
@@ -45,12 +46,25 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web ->
+            web.ignoring().requestMatchers(
+                    "/v2/api-docs/**",
+                    "/v3/api-docs/**",
+                    "/swagger-resources/**",
+                    "/swagger-ui.html/",
+                    "/swagger-ui/**",
+                    "/webjars/**"
+            );
+    }
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:[*]"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:*")); // Adjust port as needed
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true); // needed if using cookies
