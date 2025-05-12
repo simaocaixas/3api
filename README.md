@@ -3,8 +3,11 @@
 
 ## Overview
 
-A fully functional sample project written in **Java**, demonstrating how to create a **Spring Boot backend** following **REST principles** and utilizing several modern technologies. This application provides a simple **Tree CRUD** (Create, Read, Update, Delete) service and integrates multiple tools and frameworks such as:
+This is a fully functional sample project written in Java that samples a simple Spring Boot backend adhering to REST principles. The application provides a Tree CRUD service, allowing authenticated users to create, read, update, and delete tree data. User authentication is handled through JWT tokens using HTTPS-only cookies for added security.
 
+The project utilizes PostgreSQL for data storage, and pgAdmin4 for database management both are containerized with Docker for easy deployment and scalability. Swagger is integrated to provide interactive API documentation, while Mockito is used for unit testing **TO-DO**.
+
+Verify API documentation in http://localhost:8080/swagger-ui/index.html when running.
 
 ## Setup and Running localy
 
